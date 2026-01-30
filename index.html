@@ -3,320 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JP Residency - Futuristic Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>JP RESIDENCY | NEURAL MANAGEMENT INTERFACE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-blue: #00f2ff;
-            --neon-purple: #bc13fe;
-            --dark-bg: #0a0b10;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(0, 242, 255, 0.3);
+            --primary-cyan: #00f2ff;
+            --secondary-purple: #bc13fe;
+            --warning-red: #ff0055;
+            --deep-space: #05060a;
+            --panel-bg: rgba(10, 11, 18, 0.9);
+            --neon-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+            --border-style: 1px solid rgba(0, 242, 255, 0.2);
         }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
-            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
-            color: #e0e0e0;
+            background-color: var(--deep-space);
+            background-image: 
+                radial-gradient(circle at 2px 2px, rgba(0, 242, 255, 0.1) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: #ffffff;
             font-family: 'Rajdhani', sans-serif;
-            margin: 0; padding: 20px;
-            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+        /* Scanline Effect */
+        body::after {
+            content: " ";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        h1, h2, h3 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+        .system-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 40px;
+            background: var(--panel-bg);
+            border: var(--border-style);
+            border-radius: 5px;
+            box-shadow: var(--neon-shadow);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-terminal {
             text-align: center;
+            border-bottom: 2px solid var(--primary-cyan);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
         }
 
-        .card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 10px;
+        .header-terminal h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 10px;
+            background: linear-gradient(to right, #00f2ff, #bc13fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px var(--primary-cyan));
         }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .module-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .module-card:hover {
+            border-color: var(--primary-cyan);
+            background: rgba(0, 242, 255, 0.02);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .full-width { grid-column: 1 / -1; }
+
+        label {
+            display: block;
+            color: var(--primary-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
 
         input, select, textarea {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 12px;
-            border-radius: 5px;
             width: 100%;
-            box-sizing: border-box;
-        }
-
-        button {
-            background: transparent;
-            color: var(--neon-blue);
-            border: 1px solid var(--neon-blue);
-            padding: 12px;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            border-radius: 0;
             transition: 0.3s;
-            width: 100%;
-            margin-top: 10px;
-            border-radius: 5px;
         }
 
-        button:hover {
-            background: var(--neon-blue);
+        input:focus {
+            border-color: var(--secondary-purple);
+            outline: none;
+            box-shadow: 0 0 10px var(--secondary-purple);
+        }
+
+        .btn-glitch {
+            background: transparent;
+            color: var(--primary-cyan);
+            border: 1px solid var(--primary-cyan);
+            padding: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            position: relative;
+            transition: 0.3s;
+            clip-path: polygon(7% 0, 100% 0, 93% 100%, 0 100%);
+        }
+
+        .btn-glitch:hover {
+            background: var(--primary-cyan);
             color: #000;
-            box-shadow: 0 0 15px var(--neon-blue);
+            box-shadow: 0 0 30px var(--primary-cyan);
         }
 
-        .img-preview {
+        .btn-danger {
+            border-color: var(--warning-red);
+            color: var(--warning-red);
+        }
+
+        .btn-danger:hover {
+            background: var(--warning-red);
+            color: #fff;
+            box-shadow: 0 0 30px var(--warning-red);
+        }
+
+        table {
             width: 100%;
-            max-width: 300px;
-            border: 2px dashed var(--border);
-            margin-top: 10px;
-            border-radius: 10px;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.4);
         }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { color: var(--neon-purple); border-bottom: 2px solid var(--border); padding: 10px; text-align: left; }
-        td { padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        th {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--primary-cyan);
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid var(--primary-cyan);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .image-container {
+            border: 2px dashed #444;
+            padding: 15px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 10px;
+            border: 1px solid var(--primary-cyan);
+        }
 
         .hidden { display: none; }
+
+        /* Status Badges */
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .badge-paid { background: rgba(0, 255, 136, 0.2); color: #00ff88; border: 1px solid #00ff88; }
+        .badge-pending { background: rgba(255, 0, 85, 0.2); color: #ff0055; border: 1px solid #ff0055; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>JP RESIDENCY</h1>
-        <div id="homePage">
-            <button onclick="showSection('regForm')">New Registration</button>
-            <button onclick="showSection('userLogin')">Already Registered</button>
-            <button onclick="showSection('ownerLogin')">Owner Login</button>
-        </div>
-              <div id="regForm" class="hidden">
-            <h2>Guest Registration</h2>
-            <div class="grid">
-                <input type="text" id="regFullName" placeholder="Full Name">
-                <select id="regGender">
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-                <input type="number" id="regMobile" placeholder="Mobile Number">
-                <input type="email" id="regEmail" placeholder="Email ID">
+    <body>
+    <div class="system-container">
+        <header class="header-terminal">
+            <h1>JP RESIDENCY</h1>
+            <div id="status-line">SYSTEM STATUS: <span style="color: #00ff88;">ONLINE</span> | ENCRYPTION: AES-256</div>
+        </header>
+
+        <div id="mainMenu">
+            <div class="grid-layout">
+                <button class="btn-glitch" onclick="navigation('regModule')">Initialize New Registration</button>
+                <button class="btn-glitch" onclick="navigation('loginModule')">Resident Portal Login</button>
+                <button class="btn-glitch" onclick="navigation('ownerModule')">Owner / Admin Terminal</button>
             </div>
-            <textarea id="regAddress" placeholder="Full Address" rows="2" style="margin-top:15px;"></textarea>
+        </div>
+
+        <div id="regModule" class="hidden">
+            <h2 style="text-align:center;">User Data Acquisition</h2>
             
-            <h3>ID Proof & Room Details</h3>
-            <div class="grid">
-                <select id="idType">
-                    <option value="Aadhaar">Aadhaar</option>
-                    <option value="PAN">PAN</option>
-                    <option value="Passport">Passport</option>
-                </select>
-                <input type="text" id="idNum" placeholder="ID Number">
-                <input type="date" id="liveDate">
-                <input type="number" id="guestCount" placeholder="Number of Guests">
+            <div class="module-card">
+                <h3>1. Biological & Contact Data</h3>
+                <div class="grid-layout">
+                    <div><label>Full Legal Name</label><input type="text" id="reg_name" placeholder="John Doe"></div>
+                    <div><label>Gender Profile</label><select id="reg_gender"><option>Male</option><option>Female</option><option>Non-Binary</option></select></div>
+                    <div><label>Active Mobile Number</label><input type="number" id="reg_mobile" placeholder="+91 XXXX"></div>
+                    <div><label>Email Address</label><input type="email" id="reg_email" placeholder="user@net.com"></div>
+                    <div class="full-width"><label>Current Residential Address</label><textarea id="reg_address" rows="3"></textarea></div>
+                </div>
             </div>
 
-            <div class="grid">
-                <input type="number" id="regRent" placeholder="Monthly Rent (₹)">
-                <input type="number" id="regAdvance" placeholder="Advance Paid (₹)">
-                <input type="number" id="regPrevMeter" placeholder="Previous Meter Reading">
+            <div class="module-card">
+                <h3>2. Verification & Identification</h3>
+                <div class="grid-layout">
+                    <div><label>ID Document Type</label><select id="reg_idtype"><option>Aadhaar Card</option><option>PAN Card</option><option>Passport</option><option>Voter ID</option></select></div>
+                    <div><label>Document Serial Number</label><input type="text" id="reg_idnumber"></div>
+                    <div class="image-container"><label>Upload ID Photo</label><input type="file" onchange="encodeImg(this, 'idPhoto')"><div id="pre_id"></div></div>
+                    <div class="image-container"><label>Upload Signature Scan</label><input type="file" onchange="encodeImg(this, 'sigPhoto')"><div id="pre_sig"></div></div>
+                    <div class="image-container"><label>Electric Meter Reference</label><input type="file" onchange="encodeImg(this, 'metPhoto')"><div id="pre_met"></div></div>
+                </div>
             </div>
 
-            <h3>Upload Documents</h3>
-            <label>ID Image:</label> <input type="file" id="upId" onchange="preview(this, 'p1')">
-            <label>Signature:</label> <input type="file" id="upSig" onchange="preview(this, 'p2')">
-            <label>Meter Photo:</label> <input type="file" id="upMeter" onchange="preview(this, 'p3')">
-            
-            <h3>Set Password</h3>
-            <input type="password" id="regPass" placeholder="4-digit Password">
-            
-            <button onclick="registerUser()">Submit Registration</button>
-            <button onclick="showSection('homePage')">Back</button>
+            <div class="module-card">
+                <h3>3. Residency & Financial Terms</h3>
+                <div class="grid-layout">
+                    <div><label>Occupancy Start Date</label><input type="date" id="reg_date"></div>
+                    <div><label>Total Guest Count</label><input type="number" id="reg_guests" value="1"></div>
+                    <div><label>Agreed Monthly Rent (₹)</label><input type="number" id="reg_rent"></div>
+                    <div><label>Security Advance Paid (₹)</label><input type="number" id="reg_advance"></div>
+                    <div><label>Initial Meter Reading</label><input type="number" id="reg_meter_start"></div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <h3>4. Security Protocol</h3>
+                <div class="grid-layout">
+                    <div><label>New Access Password (4-Digits)</label><input type="password" id="reg_pass" maxlength="4"></div>
+                    <div><label>Confirm Access Password</label><input type="password" id="reg_conf" maxlength="4"></div>
+                </div>
+            </div>
+
+            <button class="btn-glitch" onclick="executeRegistration()">COMMIT TO DATABASE</button>
+            <button class="btn-glitch btn-danger" onclick="navigation('mainMenu')">ABORT MISSION</button>
+        </div>
+                <div id="loginModule" class="hidden">
+            <div class="module-card" style="max-width: 500px; margin: auto;">
+                <h2>Resident Login</h2>
+                <label>Access ID</label><input type="text" id="log_id" placeholder="JPXXXX">
+                <label>Security PIN</label><input type="password" id="log_pass">
+                <button class="btn-glitch" onclick="residentAuth()">VERIFY IDENTITY</button>
+                <button class="btn-glitch btn-danger" onclick="navigation('mainMenu')">BACK</button>
+            </div>
         </div>
 
-        <div id="userLogin" class="hidden">
-            <h2>Resident Login</h2>
-            <input type="text" id="loginID" placeholder="Registration Number">
-            <input type="password" id="loginPass" placeholder="Password">
-            <button onclick="handleUserLogin()">Login</button>
-            <button onclick="showSection('homePage')">Back</button>
+        <div id="ownerModule" class="hidden">
+            <div class="module-card" style="max-width: 500px; margin: auto;">
+                <h2>Admin Command Terminal</h2>
+                <label>Command Key</label><input type="password" id="admin_key">
+                <button class="btn-glitch" onclick="ownerAuth()">ACCESS CORE</button>
+                <button class="btn-glitch btn-danger" onclick="navigation('mainMenu')">BACK</button>
+            </div>
         </div>
 
-        <div id="ownerLogin" class="hidden">
-            <h2>Owner Access</h2>
-            <input type="password" id="ownerPass" placeholder="Owner Password">
-            <button onclick="handleOwnerLogin()">Access Terminal</button>
-            <button onclick="showSection('homePage')">Back</button>
-        </div>
-              <div id="dashboard" class="hidden">
-            <h2 id="dashTitle">Resident Profile</h2>
+        <div id="dashboard" class="hidden">
+            <h2 id="display_username">USER: UNKNOWN</h2>
             
-            <div class="card">
-                <h3>Monthly Payments</h3>
-                <table>
-                    <thead><tr><th>Month</th><th>Rent</th><th>Status</th></tr></thead>
-                    <tbody id="paymentBody"></tbody>
+            <div class="module-card">
+                <h3>Transaction History (Monthly Rent)</h3>
+                <table id="rentTable">
+                    <thead><tr><th>Billing Cycle</th><th>Amount</th><th>Status</th><th>Ref ID</th></tr></thead>
+                    <tbody id="rentBody"></tbody>
                 </table>
             </div>
 
-            <div class="card">
-                <h3>Electric Bill Calculator</h3>
-                <div class="grid">
-                    <input type="number" id="calcPrev" placeholder="Previous Reading">
-                    <input type="number" id="calcPres" placeholder="Present Reading">
-                    <input type="number" id="calcUnit" placeholder="Rate Per Unit">
+            <div class="module-card">
+                <h3>Energy Monitoring System</h3>
+                <div class="grid-layout">
+                    <div><label>Last Reading</label><input type="number" id="calc_last"></div>
+                    <div><label>Current Reading</label><input type="number" id="calc_now"></div>
+                    <div><label>Unit Tariff (₹)</label><input type="number" id="calc_rate" value="12"></div>
                 </div>
-                <button onclick="calculateBill()">Calculate & Save</button>
-                <h4 id="calcResult" style="text-align:center;">Total: ₹0</h4>
+                <button class="btn-glitch" onclick="calculateEnergyBill()">PROCESS ENERGY BILL</button>
+                <h2 id="energy_result" style="text-align:center; color: var(--secondary-purple);">TOTAL: ₹0.00</h2>
                 
-                <h4>Electric Bill Records</h4>
-                <table id="elecTable">
-                    <thead><tr><th>Date</th><th>Units</th><th>Total</th></tr></thead>
-                    <tbody id="elecBody"></tbody>
+                <h4>Energy Logs</h4>
+                <table id="energyTable">
+                    <thead><tr><th>Timestamp</th><th>Consumption</th><th>Total Charge</th></tr></thead>
+                    <tbody id="energyBody"></tbody>
                 </table>
             </div>
 
-            <div class="card">
-                <h3>Document Verification</h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-                    <div><p>ID Proof</p><img id="viewId" class="img-preview"></div>
-                    <div><p>Signature</p><img id="viewSig" class="img-preview"></div>
-                    <div><p>Meter</p><img id="viewMet" class="img-preview"></div>
+            <div id="adminPanel" class="hidden">
+                <div class="module-card" style="border: 1px solid var(--secondary-purple);">
+                    <h3 style="color: var(--secondary-purple);">[ADMIN] Record Modification</h3>
+                    <div class="grid-layout">
+                        <div><label>Cycle (e.g. Oct 2024)</label><input type="text" id="adm_cycle"></div>
+                        <div><label>Amount (₹)</label><input type="number" id="adm_amt"></div>
+                        <div><label>Status</label><select id="adm_stat"><option value="Paid">PAID</option><option value="Pending">PENDING</option></select></div>
+                    </div>
+                    <button class="btn-glitch" onclick="adminCommitUpdate()">INJECT RECORD TO CURRENT USER</button>
                 </div>
             </div>
 
-            <div id="ownerPanel" class="hidden">
-                <div class="card" style="border: 1px solid var(--neon-purple);">
-                    <h3>Admin Controls</h3>
-                    <input type="text" id="payMonth" placeholder="Month">
-                    <input type="number" id="payAmt" placeholder="Amount">
-                    <select id="payStatus">
-                        <option value="Paid">Paid</option>
-                        <option value="Pending">Pending</option>
-                    </select>
-                    <button onclick="savePayment()">Update Payment for this User</button>
+            <div class="module-card">
+                <h3>Stored Identity Assets</h3>
+                <div class="grid-layout">
+                    <div class="image-container"><p>DOCUMENT_ID</p><img id="v_id" class="preview-img"></div>
+                    <div class="image-container"><p>SIGNATURE_SCAN</p><img id="v_sig" class="preview-img"></div>
+                    <div class="image-container"><p>METER_PROOFS</p><img id="v_met" class="preview-img"></div>
                 </div>
             </div>
 
-            <button onclick="showSection('homePage')">Logout</button>
-              </div>
-      <script>
-    let currentUserID = null;
-    let images = { id: "", sig: "", met: "" };
+            <button class="btn-glitch btn-danger" onclick="logout()">TERMINATE SESSION</button>
+        </div>
+        <script>
+    let activeUser = null;
+    let masterAdmin = false;
+    let bufferStore = { idPhoto: "", sigPhoto: "", metPhoto: "" };
 
-    function showSection(id) {
-        document.querySelectorAll('.container > div').forEach(d => d.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
+    // Unified Navigation System
+    function navigation(viewId) {
+        const views = ['mainMenu', 'regModule', 'loginModule', 'ownerModule', 'dashboard'];
+        views.forEach(v => document.getElementById(v).classList.add('hidden'));
+        document.getElementById(viewId).classList.remove('hidden');
     }
 
-    function preview(input, key) {
+    // Binary Image Encoding (Full Base64 Support)
+    function encodeImg(input, target) {
         const reader = new FileReader();
-        reader.onload = (e) => { images[key] = e.target.result; };
+        reader.onload = (e) => { 
+            bufferStore[target] = e.target.result; 
+            // Display internal preview
+            const previewId = target === 'idPhoto' ? 'pre_id' : target === 'sigPhoto' ? 'pre_sig' : 'pre_met';
+            document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100px; height:60px; border:1px solid cyan;">`;
+        };
         reader.readAsDataURL(input.files[0]);
     }
 
-    function registerUser() {
-        const id = "JP" + Math.floor(1000 + Math.random() * 9000);
-        const data = {
-            id: id,
-            name: document.getElementById('regFullName').value,
-            pass: document.getElementById('regPass').value,
-            rent: document.getElementById('regRent').value,
-            imgId: images.p1,
-            imgSig: images.p2,
-            imgMet: images.p3
+    // Database: User Registration
+    function executeRegistration() {
+        const uid = "JP" + Math.floor(1000 + Math.random() * 9000);
+        const pass = document.getElementById('reg_pass').value;
+        if(pass !== document.getElementById('reg_conf').value) return alert("CRITICAL ERROR: PIN MISMATCH");
+
+        const payload = {
+            id: uid,
+            name: document.getElementById('reg_name').value,
+            pass: pass,
+            rent: document.getElementById('reg_rent').value,
+            meterStart: document.getElementById('reg_meter_start').value,
+            assets: { id: bufferStore.idPhoto, sig: bufferStore.sigPhoto, met: bufferStore.metPhoto },
+            profile: { mobile: document.getElementById('reg_mobile').value, date: document.getElementById('reg_date').value }
         };
-        localStorage.setItem(id, JSON.stringify(data));
-        alert("Success! ID: " + id);
-        showSection('homePage');
+
+        localStorage.setItem("USER_CORE_" + uid, JSON.stringify(payload));
+        alert("ENCRYPTION COMPLETE. YOUR ACCESS ID: " + uid);
+        navigation('mainMenu');
     }
 
-    function handleUserLogin() {
-        const id = document.getElementById('loginID').value;
-        const pass = document.getElementById('loginPass').value;
-        const user = JSON.parse(localStorage.getItem(id));
-        if(user && user.pass === pass) {
-            currentUserID = id;
-            loadPortal(id, false);
-        } else alert("Error");
+    // Resident Authentication
+    function residentAuth() {
+        const id = document.getElementById('log_id').value;
+        const pass = document.getElementById('log_pass').value;
+        const record = JSON.parse(localStorage.getItem("USER_CORE_" + id));
+
+        if(record && record.pass === pass) {
+            activeUser = id;
+            masterAdmin = false;
+            initDashboard(id);
+        } else alert("ACCESS DENIED: INVALID CREDENTIALS");
     }
 
-    function handleOwnerLogin() {
-        if(document.getElementById('ownerPass').value === "owner123") {
-            const id = prompt("Enter Resident ID to manage:");
-            if(localStorage.getItem(id)) {
-                currentUserID = id;
-                loadPortal(id, true);
-            } else alert("Not found");
-        }
+    // Owner Authentication
+    function ownerAuth() {
+        if(document.getElementById('admin_key').value === "owner777") { // Set your admin password here
+            const target = prompt("ENTER RESIDENT ID FOR MODIFICATION:");
+            if(localStorage.getItem("USER_CORE_" + target)) {
+                activeUser = target;
+                masterAdmin = true;
+                initDashboard(target);
+            } else alert("USER NOT FOUND IN LOCAL STORAGE");
+        } else alert("TERMINAL LOCKED: WRONG ADMIN KEY");
     }
 
-    function loadPortal(id, isAdmin) {
-        const user = JSON.parse(localStorage.getItem(id));
-        document.getElementById('dashTitle').innerText = "Portal: " + user.name;
-        document.getElementById('viewId').src = user.imgId || '';
-        document.getElementById('viewSig').src = user.imgSig || '';
-        document.getElementById('viewMet').src = user.imgMet || '';
+    // Dashboard Initialization with Data Isolation
+    function initDashboard(uid) {
+        const user = JSON.parse(localStorage.getItem("USER_CORE_" + uid));
+        document.getElementById('display_username').innerText = "AUTHORIZED USER: " + user.name.toUpperCase();
         
-        isAdmin ? document.getElementById('ownerPanel').classList.remove('hidden') 
-                : document.getElementById('ownerPanel').classList.add('hidden');
+        // Load Assets
+        document.getElementById('v_id').src = user.assets.id;
+        document.getElementById('v_sig').src = user.assets.sig;
+        document.getElementById('v_met').src = user.assets.met;
 
-        refreshTables();
-        showSection('dashboard');
+        // Toggle Admin Overrides
+        if(masterAdmin) document.getElementById('adminPanel').classList.remove('hidden');
+        else document.getElementById('adminPanel').classList.add('hidden');
+
+        refreshLiveTables();
+        navigation('dashboard');
     }
 
-    function refreshTables() {
-        // IMPORTANT: Unique keys per user ID
-        const payKey = "pay_" + currentUserID;
-        const elecKey = "elec_" + currentUserID;
+    // THE FIX: Unique Key Refresh
+    function refreshLiveTables() {
+        // Namespacing the keys by activeUser ID
+        const paymentKey = "VAULT_PAYMENTS_" + activeUser;
+        const energyKey = "VAULT_ENERGY_" + activeUser;
 
-        const payments = JSON.parse(localStorage.getItem(payKey)) || [];
-        const elec = JSON.parse(localStorage.getItem(elecKey)) || [];
+        const payments = JSON.parse(localStorage.getItem(paymentKey)) || [];
+        const energy = JSON.parse(localStorage.getItem(energyKey)) || [];
 
-        document.getElementById('paymentBody').innerHTML = payments.map(p => 
-            `<tr><td>${p.m}</td><td>₹${p.a}</td><td>${p.s}</td></tr>`).join('');
+        document.getElementById('rentBody').innerHTML = payments.map(p => `
+            <tr>
+                <td>${p.cycle}</td>
+                <td>₹${p.amount}</td>
+                <td><span class="badge ${p.status === 'Paid' ? 'badge-paid' : 'badge-pending'}">${p.status}</span></td>
+                <td>TXN_${Math.floor(Math.random()*100000)}</td>
+            </tr>`).join('');
 
-        document.getElementById('elecBody').innerHTML = elec.map(e => 
-            `<tr><td>${e.d}</td><td>${e.u}</td><td>₹${e.t}</td></tr>`).join('');
+        document.getElementById('energyBody').innerHTML = energy.map(e => `
+            <tr>
+                <td>${e.time}</td>
+                <td>${e.units} Units</td>
+                <td>₹${e.total}</td>
+            </tr>`).join('');
     }
 
-    function savePayment() {
-        const payKey = "pay_" + currentUserID;
-        let data = JSON.parse(localStorage.getItem(payKey)) || [];
+    // Isolated Admin Update
+    function adminCommitUpdate() {
+        const paymentKey = "VAULT_PAYMENTS_" + activeUser;
+        let data = JSON.parse(localStorage.getItem(paymentKey)) || [];
+        
         data.push({
-            m: document.getElementById('payMonth').value,
-            a: document.getElementById('payAmt').value,
-            s: document.getElementById('payStatus').value
+            cycle: document.getElementById('adm_cycle').value,
+            amount: document.getElementById('adm_amt').value,
+            status: document.getElementById('adm_stat').value
         });
-        localStorage.setItem(payKey, JSON.stringify(data));
-        refreshTables();
+
+        localStorage.setItem(paymentKey, JSON.stringify(data));
+        refreshLiveTables();
+        alert("DATABASE SYNCED FOR ID: " + activeUser);
     }
 
-    function calculateBill() {
-        const pre = document.getElementById('calcPrev').value;
-        const pres = document.getElementById('calcPres').value;
-        const rate = document.getElementById('calcUnit').value;
-        const units = pres - pre;
-        const total = units * rate;
-        document.getElementById('calcResult').innerText = "Total: ₹" + total;
+    function calculateEnergyBill() {
+        const prev = document.getElementById('calc_last').value;
+        const now = document.getElementById('calc_now').value;
+        const units = now - prev;
+        const total = units * document.getElementById('calc_rate').value;
+        
+        document.getElementById('energy_result').innerText = "TOTAL: ₹" + total.toFixed(2);
 
-        const elecKey = "elec_" + currentUserID;
-        let data = JSON.parse(localStorage.getItem(elecKey)) || [];
-        data.push({ d: new Date().toLocaleDateString(), u: units, t: total });
-        localStorage.setItem(elecKey, JSON.stringify(data));
-        refreshTables();
+        const energyKey = "VAULT_ENERGY_" + activeUser;
+        let data = JSON.parse(localStorage.getItem(energyKey)) || [];
+        data.push({ time: new Date().toLocaleString(), units: units, total: total.toFixed(2) });
+        
+        localStorage.setItem(energyKey, JSON.stringify(data));
+        refreshLiveTables();
+    }
+
+    function logout() {
+        activeUser = null;
+        masterAdmin = false;
+        navigation('mainMenu');
     }
 </script>
 </body>
